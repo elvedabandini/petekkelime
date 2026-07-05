@@ -6,7 +6,7 @@
 
 - **Petek** — 18 taşlık altıgen petek, komşu taşları sürükleyerek kelime çiz
 - **Kare** — 4×4 tahta, 8 yönlü (çapraz dahil) komşuluk
-- **Wheel** — çemberde 5-9 harf, serbest sırayla birleştir; ortadaki ⇄ ile karıştır
+- **Wheel** — çemberde 6-10 harf (1-2 şaşırtmaca harf dahil), serbest sırayla birleştir; ortadaki ⇄ ile karıştır
 
 Her modda 20 bölüm. Bölümde 1-2 gizli hedef kelime var (iki kelimeli bölümlerde
 kelimeler farklı konulardan). Bonus kelimeler puan kazandırır ve ipucu çubuğunu
