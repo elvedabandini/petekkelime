@@ -1,19 +1,21 @@
 # Petek Kelime 🐝
 
-Altıgen petek üzerinde harfleri sürükleyerek kelime bulma oyunu (prototip).
+Üç modlu Türkçe kelime bulma oyunu (prototip).
 
-- 20 bölüm — her bölümde 1-2 gizli hedef kelime (iki kelimeli bölümlerde kelimeler farklı konulardan)
-- 18 taşlık petek dokusu (5 sütun: 4-3-4-3-4)
-- Bonus kelimeler puan kazandırır ve ipucu çubuğunu doldurur (eşik: 13 puan)
-- Çubuk dolunca otomatik bir harf açılır — ilk harf asla açılmaz, en nadir (en zor) harf açılır
-- Puanlama: 3→1, 4→3, 5→7, 6→13, 7→21, 8→31, 9→43, 10→57
+## Modlar
+
+- **Petek** — 18 taşlık altıgen petek, komşu taşları sürükleyerek kelime çiz
+- **Kare** — 4×4 tahta, 8 yönlü (çapraz dahil) komşuluk
+- **Wheel** — çemberde 5-9 harf, serbest sırayla birleştir; ortadaki ⇄ ile karıştır
+
+Her modda 20 bölüm. Bölümde 1-2 gizli hedef kelime var (iki kelimeli bölümlerde
+kelimeler farklı konulardan). Bonus kelimeler puan kazandırır ve ipucu çubuğunu
+doldurur (eşik: 13 puan); çubuk dolunca otomatik bir harf açılır — ilk harf asla
+açılmaz, en nadir (en zor) harf açılır.
+
+Puanlama: 3→1, 4→3, 5→7, 6→13, 7→21, 8→31, 9→43, 10→57
 
 ## Çalıştırma
 
-Tek dosya: `index.html`. Tarayıcıda açman yeterli, kurulum gerekmez.
+Tek dosya: `index.html`. Tarayıcıda açman yeterli.
 GitHub Pages ve Vercel üzerinde doğrudan yayınlanabilir.
-
-## Planlanan
-
-- [ ] Kare mekaniği
-- [ ] Wheel mekaniği
