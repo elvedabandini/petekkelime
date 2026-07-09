@@ -38,6 +38,25 @@ h1{margin:2px 0 0;font-size:34px;font-weight:700;letter-spacing:.5px;}
 .mode-btn .ic{font-size:24px;line-height:1;}
 .mode-btn.active{background:var(--honey);color:#fff;box-shadow:0 3px 0 var(--honey-deep),0 8px 18px rgba(181,118,31,.3);}
 .section-label{width:100%;font-size:13px;font-weight:600;color:var(--ink-soft);letter-spacing:1.5px;margin:0 0 10px 4px;}
+.home-top{display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:18px;}
+.home-logo{font-size:26px;font-weight:700;letter-spacing:.5px;}
+.home-logo span{color:var(--honey-deep);}
+.avatar-wrap{position:relative;margin:6px 0 2px;}
+.avatar{width:112px;height:112px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#F7DFA8,var(--honey));
+  display:flex;align-items:center;justify-content:center;font-size:56px;
+  box-shadow:0 4px 0 var(--honey-deep),0 12px 26px rgba(181,118,31,.3);}
+.lvl-badge{position:absolute;left:50%;bottom:-12px;transform:translateX(-50%);
+  min-width:38px;height:38px;padding:0 6px;border-radius:12px;background:var(--teal);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700;
+  box-shadow:0 3px 0 #2C5A50;border:3px solid var(--bg);}
+.hello{margin-top:20px;font-size:16px;color:var(--ink-soft);font-weight:500;}
+.hello-name{font-size:24px;font-weight:700;margin-bottom:18px;}
+.play-btn{border:none;border-radius:26px;background:var(--honey);color:#fff;
+  font-family:inherit;font-size:26px;font-weight:700;padding:16px 74px;cursor:pointer;
+  box-shadow:0 4px 0 var(--honey-deep),0 14px 28px rgba(181,118,31,.35);}
+.play-btn:active{transform:translateY(3px);}
+.play-sub{font-size:13px;color:var(--ink-soft);font-weight:600;margin:10px 0 26px;}
+.levels-scroll{flex:1;overflow-y:auto;padding:10px 2px 24px;}
 .level-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;width:100%;padding-bottom:24px;}
 .lv-btn{aspect-ratio:1;border:none;border-radius:16px;background:var(--tile);box-shadow:var(--shadow);
   font-family:inherit;font-size:18px;font-weight:700;color:var(--ink);cursor:pointer;
@@ -74,6 +93,12 @@ h1{margin:2px 0 0;font-size:34px;font-weight:700;letter-spacing:.5px;}
   font-size:18px;line-height:1;opacity:.5;position:relative;flex:0 0 38px;
   display:flex;align-items:center;justify-content:center;}
 .hint-btn.ready{opacity:1;background:var(--honey);animation:pulse 1.2s infinite;}
+.hint-btn.use{opacity:1;border:none;cursor:pointer;font-family:inherit;}
+.hint-count{position:absolute;top:-6px;right:-6px;min-width:20px;height:20px;padding:0 4px;border-radius:10px;
+  background:var(--teal);color:#fff;font-size:12px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 2px 0 #2C5A50;}
+@keyframes hshake{0%,100%{transform:translateX(0);}25%{transform:translateX(-4px);}75%{transform:translateX(4px);}}
+.hint-btn.no{animation:hshake .3s;}
 @keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.1);}}
 
 .word-preview{height:38px;display:flex;align-items:center;justify-content:center;margin-bottom:2px;}
@@ -119,6 +144,8 @@ svg{touch-action:none;max-width:100%;max-height:100%;}
 .panel .btn{width:100%;}
 .ptable{width:100%;border-collapse:collapse;margin:8px 0 4px;}
 .ptable th{font-size:13px;color:var(--honey-deep);font-weight:700;padding:4px;}
+.lvl-progress{margin:4px 0 14px;text-align:left;}
+.lvl-progress-top{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--ink-soft);margin-bottom:5px;}
 .ptable td{font-size:15px;font-weight:600;padding:3px;border-top:1px solid var(--bg-deep);}
 </style>
 </head>
@@ -127,13 +154,29 @@ svg{touch-action:none;max-width:100%;max-height:100%;}
 
   <!-- MENÜ -->
   <div class="screen" id="menu">
-    <div class="logo-comb">
-      <div class="logo-hex">W</div><div class="logo-hex h">O</div><div class="logo-hex">R</div><div class="logo-hex h">D</div>
+    <div class="home-top">
+      <button class="icon-btn" onclick="showLevels()">▦</button>
+      <div class="home-logo">One <span>Big</span> Word</div>
+      <button class="icon-btn" onclick="showSettings()">⚙</button>
     </div>
-    <h1>One Big Word</h1>
-    <div class="subtitle">Petekteki harflerden TEK büyük kelimeyi bul</div>
-    <div class="section-label">BÖLÜMLER</div>
-    <div class="level-grid" id="level-grid"></div>
+    <div class="avatar-wrap">
+      <div class="avatar">🐝</div>
+      <div class="lvl-badge" id="player-lvl">1</div>
+    </div>
+    <div class="hello">Merhaba,</div>
+    <div class="hello-name">Kelime Ustası</div>
+    <button class="play-btn" onclick="playNext()">Oyna</button>
+    <div class="play-sub" id="play-sub"></div>
+  </div>
+
+  <!-- BÖLÜMLER -->
+  <div class="screen hidden" id="levels">
+    <div class="top-bar">
+      <button class="icon-btn" onclick="hideLevels()">←</button>
+      <div class="level-title"><div class="b">Bölümler</div></div>
+      <div style="width:40px"></div>
+    </div>
+    <div class="levels-scroll"><div class="level-grid" id="level-grid"></div></div>
   </div>
 
   <!-- OYUN -->
@@ -144,14 +187,14 @@ svg{touch-action:none;max-width:100%;max-height:100%;}
       <button class="icon-btn" onclick="showTable()">ⓘ</button>
     </div>
     <div class="score-row">
-      <div class="timer" id="g-timer">0:00</div>
+      <div class="timer" id="g-combo"></div>
       <div class="score-pill"><small>PUAN</small><span id="g-score">0</span></div>
       <div class="timer" style="opacity:0">0:00</div>
     </div>
     <div class="targets" id="g-targets"></div>
     <div class="hint-row">
       <div class="hint-track"><div class="hint-fill" id="hint-fill"></div></div>
-      <div class="hint-btn" id="hint-btn">💡</div>
+      <button class="hint-btn use" id="hint-btn" onclick="manualHint()">💡<span class="hint-count" id="hint-count">0</span></button>
     </div>
     <div class="word-preview"><div class="wp-pill empty" id="wp"></div></div>
     <div id="board-wrap"></div>
@@ -160,15 +203,30 @@ svg{touch-action:none;max-width:100%;max-height:100%;}
 
   <div class="overlay hidden" id="win-overlay">
     <div class="panel">
-      <h2>Bölüm Tamamlandı! 🎉</h2>
+      <h2 id="w-title">Bölüm Tamamlandı!</h2>
       <div class="theme-name" id="w-theme"></div>
       <div class="stat-grid">
-        <div class="stat"><div class="v" id="w-score">0</div><div class="k">PUAN</div></div>
         <div class="stat"><div class="v" id="w-time">0:00</div><div class="k">SÜRE</div></div>
-        <div class="stat"><div class="v" id="w-bonus">0</div><div class="k">KELİME</div></div>
+        <div class="stat"><div class="v" id="w-iq">100</div><div class="k">IQ</div></div>
+        <div class="stat"><div class="v" id="w-combo">0</div><div class="k">KOMBO</div></div>
+      </div>
+      <div id="w-quote" style="font-size:14px;color:var(--ink-soft);font-weight:500;margin:2px 0 10px;"></div>
+      <div class="lvl-progress">
+        <div class="lvl-progress-top"><span id="w-plvl">Seviye 1</span><span id="w-pcount">0/10</span></div>
+        <div class="hint-track" style="width:100%"><div class="hint-fill" id="w-pfill"></div></div>
+        <div id="w-reward" style="font-size:13px;color:var(--honey-deep);font-weight:700;margin-top:6px;"></div>
       </div>
       <button class="btn primary" id="w-next" onclick="nextLevel()">Sonraki Bölüm →</button>
       <button class="btn ghost" onclick="goMenu()">Bölümler</button>
+    </div>
+  </div>
+
+  <div class="overlay hidden" id="settings-overlay" onclick="if(event.target===this)this.classList.add('hidden')">
+    <div class="panel">
+      <h2>Ayarlar</h2>
+      <button class="btn ghost" id="mute-btn" onclick="toggleMute()">🔊 Sesler: Açık</button>
+      <button class="btn ghost" onclick="showTable();document.getElementById('settings-overlay').classList.add('hidden')">📊 Puan Tablosu</button>
+      <button class="btn ghost" onclick="resetProgress()" style="color:var(--danger)">İlerlemeyi Sıfırla</button>
     </div>
   </div>
 
@@ -197,12 +255,20 @@ const HINT_THRESH = {petek:13};
 function HF(){return HINT_THRESH[mode];}
 
 // ---------- kalıcılık ----------
-let progress = {petek:{done:{},best:{}}, kare:{done:{},best:{}}, wheel:{done:{},best:{}}};
+let progress = {petek:{done:{},best:{}}, meta:{hints:2, granted:0, mute:false}};
 function mergeProgress(p){
   if(!p) return;
-  if(p.done){ progress.petek = p; return; }  // eski tek-mod formatı
-  for(const m of ['petek','kare','wheel']) if(p[m]) progress[m]=p[m];
+  if(p.done){ progress.petek = p; }
+  else { if(p.petek) progress.petek=p.petek; if(p.meta) progress.meta=Object.assign(progress.meta,p.meta); }
 }
+function totalDone(){ return Object.keys(progress.petek.done).length; }
+function playerLevel(){ return 1 + Math.floor(totalDone()/10); }
+function nextLevelIndex(){
+  const n=MODES.petek.levels.length;
+  for(let i=0;i<n;i++) if(!progress.petek.done[i]) return i;
+  return n-1;
+}
+function playNext(){ startLevel(nextLevelIndex()); }
 async function loadProgress(){
   try{
     if(window.storage){
@@ -226,6 +292,7 @@ async function saveProgress(){
 // ---------- ses ----------
 let AC=null;
 function beep(f,d=0.07,type='sine',g=0.12){
+  if(progress.meta && progress.meta.mute) return;
   try{
     AC = AC || new (window.AudioContext||window.webkitAudioContext)();
     const o=AC.createOscillator(), gn=AC.createGain();
@@ -239,6 +306,8 @@ function beep(f,d=0.07,type='sine',g=0.12){
 let mode='petek';
 function setMode(m){mode=m;renderMenu();}
 function renderMenu(){
+  document.getElementById('player-lvl').textContent=playerLevel();
+  document.getElementById('play-sub').textContent='Bölüm '+(nextLevelIndex()+1)+' · 💡 '+progress.meta.hints;
   const g=document.getElementById('level-grid');g.innerHTML='';
   MODES[mode].levels.forEach((lv,i)=>{
     const b=document.createElement('button');
@@ -251,32 +320,52 @@ function renderMenu(){
 function goMenu(){
   stopTimer();
   document.getElementById('game').classList.add('hidden');
+  document.getElementById('levels').classList.add('hidden');
   document.getElementById('win-overlay').classList.add('hidden');
   document.getElementById('menu').classList.remove('hidden');
   renderMenu();
 }
 function showTable(){document.getElementById('table-overlay').classList.remove('hidden');}
+function showLevels(){document.getElementById('levels').classList.remove('hidden');}
+function hideLevels(){document.getElementById('levels').classList.add('hidden');}
+function showSettings(){
+  document.getElementById('mute-btn').textContent=progress.meta.mute?'🔇 Sesler: Kapalı':'🔊 Sesler: Açık';
+  document.getElementById('settings-overlay').classList.remove('hidden');
+}
+function toggleMute(){
+  progress.meta.mute=!progress.meta.mute; saveProgress();
+  document.getElementById('mute-btn').textContent=progress.meta.mute?'🔇 Sesler: Kapalı':'🔊 Sesler: Açık';
+}
+function resetProgress(){
+  if(!confirm('Tüm ilerleme silinsin mi?'))return;
+  progress={petek:{done:{},best:{}}, meta:{hints:2, granted:0, mute:progress.meta.mute}};
+  saveProgress(); renderMenu();
+  document.getElementById('settings-overlay').classList.add('hidden');
+}
 
 // ---------- oyun durumu ----------
 let L=null, li=0, score=0, hintPts=0, found=new Set(), solved=new Set(), revealed={}, t0=0, tInt=null;
+let combo=0, maxCombo=0, lastW=0, wordLens=[], hintsUsed=0;
+const COMBO_GAP=15000; // 15 sn kelime gelmezse akış (kombo) kırılır
 let centers={}, hitR=30, adjOK=null, tileR=44, shuffleR=42, wheelD=320;
 
 function startLevel(i){
   li=i; L=MODES[mode].levels[i];
   score=0; hintPts=0; found=new Set(); solved=new Set();
+  combo=0; maxCombo=0; lastW=0; wordLens=[]; hintsUsed=0; updateCombo();
   revealed={}; L.targets.forEach(t=>revealed[t]=new Array(t.length).fill(false));
   document.getElementById('menu').classList.add('hidden');
+  document.getElementById('levels').classList.add('hidden');
   document.getElementById('win-overlay').classList.add('hidden');
   document.getElementById('game').classList.remove('hidden');
   document.getElementById('g-level').textContent='Bölüm '+(i+1)+'/'+MODES[mode].levels.length;
   document.getElementById('g-mode').textContent=MODES[mode].name;
   document.getElementById('g-score').textContent='0';
   document.getElementById('bonus-strip').innerHTML='';
-  updateHintUI();
+  updateHintUI();updateHintBadge();
   renderTargets();
   renderBoard();
   t0=Date.now(); stopTimer();
-  tInt=setInterval(()=>{document.getElementById('g-timer').textContent=fmtT(Date.now()-t0);},500);
 }
 function stopTimer(){if(tInt){clearInterval(tInt);tInt=null;}}
 function fmtT(ms){const s=Math.floor(ms/1000);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
@@ -470,6 +559,16 @@ function attachPointer(svg){
   svg.addEventListener('pointercancel',up);
 }
 function curWord(){return path.map(k=>centers[k].l).join('');}
+function registerWord(w){
+  const now=Date.now();
+  if(now-lastW>COMBO_GAP) combo=0;
+  combo++; maxCombo=Math.max(maxCombo,combo); lastW=now;
+  wordLens.push(w.length); updateCombo();
+}
+function updateCombo(){
+  const el=document.getElementById('g-combo');
+  if(el) el.textContent = combo>=2 ? '🔥x'+combo : '';
+}
 function updateSel(){
   document.querySelectorAll('.hexg').forEach(g=>g.classList.toggle('sel',path.includes(g.dataset.key)));
   const trail=document.getElementById('trail');
@@ -506,6 +605,7 @@ function submit(){
   }
   if(L.bonus.includes(w)){
     found.add(w);
+    registerWord(w);
     const pts=POINTS[w.length]||0;
     score+=pts;hintPts+=pts;
     document.getElementById('g-score').textContent=score;
@@ -518,6 +618,7 @@ function submit(){
     clear();return;
   }
   wp.classList.add('bad');beep(180,0.15,'square',0.06);
+  combo=0;updateCombo();
   setTimeout(clear,350);
 }
 
@@ -545,6 +646,7 @@ function addChip(w){
 // ---------- hedef çözümü ----------
 function solveTarget(w){
   solved.add(w);
+  registerWord(w);
   score+=POINTS[w.length]||0;
   document.getElementById('g-score').textContent=score;
   flashPath('flash-good');
@@ -589,8 +691,25 @@ function checkAutoHint(){
 }
 function useHint(){
   if(hintPts<HF())return;
+  if(revealLetter()){ hintPts-=HF(); updateHintUI(); }
+}
+function manualHint(){
+  const hb=document.getElementById('hint-btn');
+  if(progress.meta.hints<=0){
+    hb.classList.add('no');setTimeout(()=>hb.classList.remove('no'),350);
+    beep(180,0.1,'square',0.05);return;
+  }
+  if(revealLetter()){
+    progress.meta.hints--; saveProgress(); updateHintBadge();
+  }
+}
+function updateHintBadge(){
+  const el=document.getElementById('hint-count');
+  if(el) el.textContent=progress.meta.hints;
+}
+function revealLetter(){
   const open=L.targets.filter(t=>!solved.has(t)).sort((a,b)=>b.length-a.length);
-  if(!open.length)return;
+  if(!open.length)return false;
   const t=open[0];
   // Turkce harf sikligi: yaygin -> nadir. Ipucu en nadir (en zor) harfi acar.
   const FREQ='AEİNRLIKDMUYTSBOÜŞZGÇHĞVCÖPFJW';
@@ -599,14 +718,15 @@ function useHint(){
   for(let i=1;i<t.length;i++) if(!revealed[t][i]) cands.push(i);
   let idx;
   if(cands.length){
-    const maxR=Math.max(...cands.map(i=>rarity(t[i])));
-    const top=cands.filter(i=>rarity(t[i])===maxR);
+    // yaygin harfler once acilir; F, J, O gibi kelimeyi ele veren nadir harfler SONA saklanir
+    const minR=Math.min(...cands.map(i=>rarity(t[i])));
+    const top=cands.filter(i=>rarity(t[i])===minR);
     idx=top[Math.floor(Math.random()*top.length)];
   } else idx = revealed[t][0] ? -1 : 0;
-  if(idx<0)return;
+  if(idx<0)return false;
   revealed[t][idx]=true;
-  hintPts-=HF();
-  updateHintUI();renderTargets();
+  hintsUsed++;
+  renderTargets();
   const hb=document.getElementById('hint-btn');
   hb.classList.add('ready');setTimeout(()=>hb.classList.remove('ready'),900);
   beep(880,0.15,'sine');
@@ -614,6 +734,7 @@ function useHint(){
     solved.add(t);renderTargets();
     if(L.targets.every(x=>solved.has(x))) setTimeout(win,400);
   }
+  return true;
 }
 
 // ---------- kazanma ----------
@@ -622,11 +743,45 @@ function win(){
   const ms=Date.now()-t0;
   progress[mode].done[li]=true;
   progress[mode].best[li]=Math.max(progress[mode].best[li]||0,score);
+  // 10 bölümde bir seviye atla + ipucu ödülü
+  const milestones=Math.floor(totalDone()/10);
+  let rewardTxt='';
+  if(milestones>progress.meta.granted){
+    const earned=(milestones-progress.meta.granted)*3;
+    progress.meta.hints+=earned;
+    progress.meta.granted=milestones;
+    rewardTxt='🎁 Seviye '+playerLevel()+' oldun · +'+earned+' 💡 ipucu!';
+  }
   saveProgress();
-  document.getElementById('w-theme').textContent=MODES[mode].name+' · Bölüm '+(li+1);
-  document.getElementById('w-score').textContent=score;
+  const td=totalDone();
+  document.getElementById('w-plvl').textContent='Seviye '+playerLevel();
+  document.getElementById('w-pcount').textContent=(td%10)+'/10';
+  document.getElementById('w-pfill').style.width=(td%10)*10+'%';
+  document.getElementById('w-reward').textContent=rewardTxt;
+  // ---- IQ hesabı ----
+  // Parametreler: ortalama kelime uzunluğu (uzun kelimeyle hint doldurmak zekice),
+  // maks kombo (akıcılık), kullanılan ipucu (ceza), süre (hız bonusu)
+  const secs=ms/1000;
+  const avgLen = wordLens.length ? wordLens.reduce((a,b)=>a+b,0)/wordLens.length : 3.5;
+  let iq = 90
+    + (avgLen-3.5)*10
+    + Math.min(maxCombo,30)*0.7
+    - hintsUsed*6
+    + Math.max(0,(300-secs))/210*15;
+  iq = Math.max(60, Math.min(160, iq));
+  const tiers=[[130,'Dahi! 🌟'],[112,'Parlak! ✨'],[95,'Harika! 🎉'],[0,'Tamamlandı!']];
+  const title=tiers.find(t=>iq>=t[0])[1];
+  // İçerik metinleri: PLACEHOLDER — asıl metinlere birlikte çalışılacak
+  const quotes = iq>=130 ? 'Zor kelimeler senin için ısınma turu!'
+    : iq>=112 ? 'Kelime dağarcığın parlıyor.'
+    : iq>=95 ? 'Petekteki her köşeyi çalıştın.'
+    : 'Büyük kelimeyi buldun, gerisi detay.';
+  document.getElementById('w-title').textContent=title;
+  document.getElementById('w-theme').textContent='Bölüm '+(li+1)+' · '+score+' puan';
   document.getElementById('w-time').textContent=fmtT(ms);
-  document.getElementById('w-bonus').textContent=found.size;
+  document.getElementById('w-iq').textContent=iq.toFixed(1);
+  document.getElementById('w-combo').textContent=maxCombo;
+  document.getElementById('w-quote').textContent=quotes;
   document.getElementById('w-next').style.display= li+1<MODES[mode].levels.length?'block':'none';
   document.getElementById('win-overlay').classList.remove('hidden');
   beep(523,0.12,'triangle');setTimeout(()=>beep(659,0.12,'triangle'),120);setTimeout(()=>beep(784,0.25,'triangle'),240);
